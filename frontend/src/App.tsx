@@ -1,18 +1,32 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from "react";
+import "./App.css";
+import DisplayNFTs from "./components/DisplayNFTs";
+import Header from "./components/Header";
+import Footer from "./components/Footer";
+import ConnectWallet from "./components/ConnectWallet";
 
-function App() {
+const App = () => {
+  const [userAddress, setUserAddress] = useState<null | string>(null);
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-      </header>
-    </div>
+    <>
+      <Header />
+      <main>
+        <ConnectWallet setUserAddress={setUserAddress} userAddress={userAddress} />
+
+        <div className="album py-5 bg-light">
+          <div className="container">
+            {/* <DisplayNFTs /> */}
+          </div>
+        </div>
+      </main>
+      <Footer />
+    </>
   );
-}
+  // return (
+  //   <div className="App">
+  //     <DisplayNFT />
+  //   </div>
+  // );
+};
 
 export default App;
