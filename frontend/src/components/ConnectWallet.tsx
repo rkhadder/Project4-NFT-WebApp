@@ -1,4 +1,4 @@
-// import MintNFT from "./MintNFT";
+import MintNFT from "./MintNFT";
 import { useEthers, useEtherBalance } from "@usedapp/core";
 
 // ConnectButton.tsx
@@ -24,7 +24,7 @@ function ConnectWallet() {
                   <>
                     <span>Connected as</span> <br />
                     <span>{account}</span> <br />
-                    {/* <MintNFT userAddress={account} /> */}
+                    <MintNFT userAddress={account} />
                   </>
                 ) : (
                   <button
