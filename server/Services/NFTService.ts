@@ -4,6 +4,8 @@ import mergeImages from 'merge-images';
 import { Canvas, Image } from 'canvas';
 import { logInfo } from "../Config/Logger";
 import { BACKGROUND_COMPONENTS, PLAYER_COMPONENTS, WEAPON_COMPONENTS } from "../Data/NFTComponents";
+import { uploadFile, uploadJson } from "./PinataService";
+import { IPFS_WEB_URL, PROJECT_NAME } from "../Constants";
 
 const tempNft : NFT = {
     name: "Project 4 NFT#2473",
@@ -13,6 +15,9 @@ const tempNft : NFT = {
     external_url: "https://project4.com",
     attributes: [{"trait_type":"Background","value":"New Punk Blue"},{"trait_type":"Eyes","value":"Hypnotized"},{"trait_type":"Mouth","value":"Bored"},{"trait_type":"Hat","value":"Sushi Chef Headband"},{"trait_type":"Fur","value":"Golden Brown"}]
 };
+
+const cachedNFTs : Record<string, NFT> = {};
+const tokenToCIDMap : Record<string, string> = {};
 
 export function getNFTMetadata(_tokenId: string) : NFT {
     return tempNft;
@@ -32,8 +37,28 @@ export async function generateNFT() : Promise<GeneratedNFT> {
         Image
     });
     const mergedImageBuffer = mergedImage.substring(mergedImage.indexOf(','));
+
     return {
         data: Buffer.from(mergedImageBuffer, 'base64'),
         attributes: [background.attribute, player.attribute, weapon.attribute]
     }
+}
+
+export async function uploadNFT(generatedNFT: GeneratedNFT, id: number) : Promise<[NFT, string]> {
+    const nftName = `${PROJECT_NAME}#${id}`;
+
+    const imageCID = await uploadFile(generatedNFT.data, `${nftName}.jpg`);
+    const imageUrl = `${IPFS_WEB_URL}${imageCID}`;
+    const nft : NFT = {
+        name: nftName,
+        description: "NFT for Project 4 of Encode May's Solidity Bootcamp",
+        tokenId: id,
+        image: imageUrl,
+        external_url: "https://project4.com",
+        attributes: generatedNFT.attributes
+    };
+    cachedNFTs[id] = nft;
+    const metadataCID = await uploadJson(nft, `${nftName}.json`);
+    tokenToCIDMap[id] = metadataCID;
+    return [nft, metadataCID];
 }
