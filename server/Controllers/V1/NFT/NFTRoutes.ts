@@ -1,6 +1,6 @@
 import express, { Router } from "express";
 import { logInfo } from "../../../Config/Logger";
-import { generateNFT, getNFTMetadata, uploadNFT } from "../../../Services/NFTService";
+import { generateNFT, getNFTMetadata, getNFTMetadatas, uploadNFT } from "../../../Services/NFTService";
 
 let counter : number = 0;
 
@@ -14,6 +14,12 @@ router.post('/generate', async (_req, res) => {
     logInfo(`Uploaded NTF metadata cid=${cid}`)
 
     return res.json({nft: nft, cid: cid});
+})
+router.get('/', (_req, res) => {
+    logInfo(`Getting all NFT metadatas`);
+    const metadatas = getNFTMetadatas();
+
+    return res.json({NFTs: metadatas});
 })
 router.get('/:id', (req, res) => {
     const tokenId = req.params.id;
