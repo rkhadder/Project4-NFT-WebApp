@@ -1,11 +1,15 @@
-import { GeneratedNFT, NFT, NFTComponent } from "../Models/NFT";
-import { getRandomNumber } from "../Utils";
+import { GeneratedNFT, NFT } from "../Models/NFT";
+import { connectToWallet, getRandomNumber } from "../Utils";
 import mergeImages from 'merge-images';
 import { Canvas, Image } from 'canvas';
-import { logInfo } from "../Config/Logger";
+import { logError, logInfo } from "../Config/Logger";
 import { BACKGROUND_COMPONENTS, PLAYER_COMPONENTS, WEAPON_COMPONENTS } from "../Data/NFTComponents";
 import { uploadFile, uploadJson } from "./PinataService";
 import { IPFS_WEB_URL, PROJECT_NAME } from "../Constants";
+import { Contract, ethers } from 'ethers';
+import { NFT_CONTRACT_ADDRESS, WALLET_PRIVATE_KEY } from "../Config/Config";
+import { DungeonDefenders, } from "../Models/NFTToken";
+import compiledContract from "../Data/NFTToken";
 
 const tempNft : NFT = {
     name: "Project 4 NFT#2473",
@@ -61,4 +65,42 @@ export async function uploadNFT(generatedNFT: GeneratedNFT, id: number) : Promis
     const metadataCID = await uploadJson(nft, `${nftName}.json`);
     tokenToCIDMap[id] = metadataCID;
     return [nft, metadataCID];
+}
+
+export function registerEventListeners() {
+    if (!WALLET_PRIVATE_KEY) {
+        logError('Don\'t have wallet secret key setup', 'registerEventListeners');
+        return;
+    }
+    if (!NFT_CONTRACT_ADDRESS) {
+        logError('Don\'t have nft contract address setup', 'registerEventListeners');
+        return;
+    }
+
+    const [provider, _wallet, signer] = connectToWallet() ?? [];
+    if (!provider) {
+        logError('No provider', 'registerEventListeners');
+        return;
+    }
+
+    const tokenContract: DungeonDefenders = new Contract(
+        NFT_CONTRACT_ADDRESS,
+        compiledContract.abi,
+        signer
+    ) as DungeonDefenders;
+
+    logInfo('Connecting to transfer events', 'registerEventListeners');
+    const transferFilter = tokenContract.filters.Transfer();
+    provider.on(transferFilter, async (log) => {
+        const fromStr = log.topics[1];
+        const toStr = log.topics[2];
+        const tokenIdStr = log.topics[3];
+        logInfo(`Transfered tokenId=${tokenIdStr} from=${fromStr} to=${toStr}`, 'registerEventListeners');
+        if (!ethers.utils.isAddress(fromStr)) {
+            const tokenId = parseInt(tokenIdStr.replace('0x', ''));
+            logInfo(`Minting for tokenId=${tokenId}`, 'registerEventListeners');
+            const generatedNFT = await generateNFT();
+            await uploadNFT(generatedNFT, tokenId);
+        }
+    });
 }
