@@ -2,29 +2,22 @@ import { GeneratedNFT, NFT } from "../Models/NFT";
 import { connectToWallet, getRandomNumber } from "../Utils";
 import mergeImages from 'merge-images';
 import { Canvas, Image } from 'canvas';
-import { logError, logInfo } from "../Config/Logger";
+import { logError, logInfo, logWarn } from "../Config/Logger";
 import { BACKGROUND_COMPONENTS, PLAYER_COMPONENTS, WEAPON_COMPONENTS } from "../Data/NFTComponents";
 import { uploadFile, uploadJson } from "./PinataService";
 import { IPFS_WEB_URL, PROJECT_NAME } from "../Constants";
 import { Contract, ethers } from 'ethers';
 import { NFT_CONTRACT_ADDRESS, WALLET_PRIVATE_KEY } from "../Config/Config";
 import { DungeonDefenders, } from "../Models/NFTToken";
+import * as db from './DBService';
 import compiledContract from "../Data/NFTToken";
 
-const tempNft : NFT = {
-    name: "Project 4 NFT#2473",
-    description: "NFT for Project 4 of Encode May's Solidity Bootcamp",
-    tokenId: 2473,
-    image: "https://img.seadn.io/files/9b791356bc13e1fb3da2350aee28bc4e.png",
-    external_url: "https://project4.com",
-    attributes: [{"trait_type":"Background","value":"New Punk Blue"},{"trait_type":"Eyes","value":"Hypnotized"},{"trait_type":"Mouth","value":"Bored"},{"trait_type":"Hat","value":"Sushi Chef Headband"},{"trait_type":"Fur","value":"Golden Brown"}]
-};
+export function getNFTMetadata(tokenId: string) : NFT | undefined {
+    return db.getNFTMetadata(tokenId);
+}
 
-const cachedNFTs : Record<string, NFT> = {};
-const tokenToCIDMap : Record<string, string> = {};
-
-export function getNFTMetadata(_tokenId: string) : NFT {
-    return tempNft;
+export function getNFTMetadatas() : NFT[] {
+    return db.getNFTs();
 }
 
 export async function generateNFT() : Promise<GeneratedNFT> {
@@ -61,12 +54,23 @@ export async function uploadNFT(generatedNFT: GeneratedNFT, id: number) : Promis
         external_url: "https://project4.com",
         attributes: generatedNFT.attributes
     };
-    cachedNFTs[id] = nft;
+    db.storeNFTMetadata(id.toString(), nft);
     const metadataCID = await uploadJson(nft, `${nftName}.json`);
-    tokenToCIDMap[id] = metadataCID;
+    db.storeNFTCID(id.toString(), metadataCID);
     return [nft, metadataCID];
 }
 
+async function handleMintEvent(tokenId: number) {
+    const metadata = db.getNFTMetadata(tokenId.toString());
+    if (metadata) {
+        logWarn(`tokenId=${tokenId} already minted`, 'handleMintEvent');
+        return;
+    }
+
+    logInfo(`Minting for tokenId=${tokenId}`, 'handleMintEvent');
+    const generatedNFT = await generateNFT();
+    await uploadNFT(generatedNFT, tokenId);
+}
 export function registerEventListeners() {
     if (!WALLET_PRIVATE_KEY) {
         logError('Don\'t have wallet secret key setup', 'registerEventListeners');
@@ -97,10 +101,8 @@ export function registerEventListeners() {
         const tokenIdStr = log.topics[3];
         logInfo(`Transfered tokenId=${tokenIdStr} from=${fromStr} to=${toStr}`, 'registerEventListeners');
         if (!ethers.utils.isAddress(fromStr)) {
-            const tokenId = parseInt(tokenIdStr.replace('0x', ''));
-            logInfo(`Minting for tokenId=${tokenId}`, 'registerEventListeners');
-            const generatedNFT = await generateNFT();
-            await uploadNFT(generatedNFT, tokenId);
+            const tokenId = parseInt(tokenIdStr.replace('0x', ''), 16);
+            await handleMintEvent(tokenId);
         }
     });
 }
