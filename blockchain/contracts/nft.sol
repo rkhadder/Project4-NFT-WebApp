@@ -5,12 +5,12 @@ import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
 import "@openzeppelin/contracts/utils/Counters.sol";
 
-contract MyToken is ERC721, ERC721URIStorage {
+contract DungeonDefenders is ERC721, ERC721URIStorage {
     using Counters for Counters.Counter;
 
     Counters.Counter private _tokenIdCounter;
 
-    constructor() ERC721("MyToken", "MTK") {}
+    constructor() ERC721("DungeonDefenders", "DDS") {}
 
     // when we have a final app
     // function _baseURI() internal pure override returns (string memory) {
