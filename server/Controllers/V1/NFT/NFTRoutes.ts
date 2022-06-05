@@ -1,8 +1,19 @@
 import express, { Router } from "express";
 import { logInfo } from "../../../Config/Logger";
-import { getNFTMetadata } from "../../../Services/NFTService";
+import { generateNFT, getNFTMetadata } from "../../../Services/NFTService";
 
 const router = express.Router();
+router.post('/generate', async (_req, res) => {
+    logInfo(`Generating NFT`);
+    const nft = await generateNFT();
+    logInfo(`Generated NFT with attributes=${JSON.stringify(nft.attributes)}`);
+
+    res.writeHead(200, {
+        'Content-Type': 'image/png',
+        'Content-Length': nft.data.length
+    });
+    return res.end(nft.data);
+})
 router.get('/:id', (req, res) => {
     const tokenId = req.params.id;
     logInfo(`Getting metadata for tokenId=${tokenId}`);
