@@ -1,7 +1,6 @@
 import MintNFT from "./MintNFT";
 import { useEthers, useEtherBalance } from "@usedapp/core";
 
-// ConnectButton.tsx
 function ConnectWallet() {
     const {activateBrowserWallet, account } = useEthers();
     const etherBalance = useEtherBalance(account);
