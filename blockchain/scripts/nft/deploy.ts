@@ -1,6 +1,6 @@
 import { ethers } from "ethers";
 import "dotenv/config";
-import * as nftJson from "../../artifacts/contracts/nft.sol/MyToken.json";
+import * as nftJson from "../../artifacts/contracts/nft.sol/DungeonDefenders.json";
 import { connectToWallet } from "../utils";
 
 /**
