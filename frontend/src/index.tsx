@@ -5,13 +5,16 @@ import 'bootstrap/dist/css/bootstrap.css';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
+import { DAppProvider } from "@usedapp/core";
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );
 root.render(
   <React.StrictMode>
-    <App />
+   <DAppProvider config={{}}>
+      <App />
+    </DAppProvider>
   </React.StrictMode>
 );
 
