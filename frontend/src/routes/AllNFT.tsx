@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
+
 import { API_ADDRESS } from "../constant";
 import DisplaySingleNFT from "../components/DisplaySingleNFT";
+import NotFound from "../components/NotFound";
 import type { NFT } from "../types";
 
 const getAllNFT = async () => {
@@ -21,16 +23,16 @@ export default function AllNFT() {
     wrapper();
   }, []);
 
-  return (
-    allNFT && (
-      <>
-        <h2 className="text-center mb-4">Our Great Defenders</h2>
-        <div className="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
-          {allNFT.map((NFT: NFT) => (
-            <DisplaySingleNFT key={NFT.tokenId} NFT={NFT} />
-          ))}
-        </div>{" "}
-      </>
-    )
+  return allNFT ? (
+    <>
+      <h2 className="text-center mb-4">Our Great Defenders</h2>
+      <div className="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
+        {allNFT.map((NFT: NFT) => (
+          <DisplaySingleNFT key={NFT.tokenId} NFT={NFT} />
+        ))}
+      </div>
+    </>
+  ) : (
+    <NotFound />
   );
 }

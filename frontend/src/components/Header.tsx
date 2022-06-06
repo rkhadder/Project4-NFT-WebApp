@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import ConnectWallet from "./ConnectWallet";
 
 const Header = () => {
@@ -6,9 +7,9 @@ const Header = () => {
       <div className="navbar navbar-dark bg-dark shadow-sm">
         <div className="container">
           <div>
-            <a href="/" className="navbar-brand d-flex align-items-center">
+            <Link to="/" className="navbar-brand d-flex align-items-center">
               <strong>Dungeon Defenders</strong>
-            </a>
+            </Link>
           </div>
           <ConnectWallet />
         </div>

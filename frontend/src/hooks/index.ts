@@ -15,3 +15,8 @@ export function useMint() {
   const { state, send } = useContractFunction(contract, "safeMint", {});
   return { state, send };
 }
+
+export function useTransfer() {
+  const { state, send } = useContractFunction(contract, "transferFrom", {});
+  return { state, send };
+}
