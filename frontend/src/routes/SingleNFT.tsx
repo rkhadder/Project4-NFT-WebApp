@@ -9,7 +9,6 @@ const getNFT = async (nftId: string | undefined) => {
   if (res.status === 404) return null;
   const nftData = await res.json();
 
-  console.log(nftData)
   return nftData;
 };
 
