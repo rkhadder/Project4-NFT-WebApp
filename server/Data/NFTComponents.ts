@@ -104,5 +104,40 @@ export const WEAPON_COMPONENTS : NFTComponent[] = [
             trait_type: "weapon",
             value: "mace"
         }
+    },
+    {
+        imgPath: 'Assets/Weapon/axe.png',
+        attribute: {
+            trait_type: "weapon",
+            value: "axe"
+        }
+    },
+    {
+        imgPath: 'Assets/Weapon/club.png',
+        attribute: {
+            trait_type: "weapon",
+            value: "club"
+        }
+    },
+    {
+        imgPath: 'Assets/Weapon/hammer_small.png',
+        attribute: {
+            trait_type: "weapon",
+            value: "hammer_small"
+        }
+    },
+    {
+        imgPath: 'Assets/Weapon/silver_long_sword.png',
+        attribute: {
+            trait_type: "weapon",
+            value: "silver_long_sword"
+        }
+    },
+    {
+        imgPath: 'Assets/Weapon/silver_saber.png',
+        attribute: {
+            trait_type: "weapon",
+            value: "silver_saber"
+        }
     }
 ]

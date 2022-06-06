@@ -9,11 +9,13 @@ router.post('/generate', async (_req, res) => {
     logInfo(`Generating NFT`);
     const generatedNFT = await generateNFT();
     logInfo(`Generated NFT with attributes=${JSON.stringify(generatedNFT.attributes)}`);
-    logInfo('Uploading NFT');
-    const [nft, cid] = await uploadNFT(generatedNFT, counter++);
-    logInfo(`Uploaded NTF metadata cid=${cid}`)
 
-    return res.json({nft: nft, cid: cid});
+    res.writeHead(200, {
+        "Content-Type": "image/jpeg",
+        "Content-Length": generatedNFT.data.length
+    });
+
+    return res.end(generatedNFT.data);
 })
 router.get('/', (_req, res) => {
     logInfo(`Getting all NFT metadatas`);

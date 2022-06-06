@@ -29,7 +29,40 @@ export async function generateNFT() : Promise<GeneratedNFT> {
     logInfo(`player=${JSON.stringify(player)}`, 'generateNFT');
     logInfo(`weapon=${JSON.stringify(weapon)}`, 'generateNFT');
 
-    const mergedImage = await mergeImages([background.imgPath, player.imgPath, weapon.imgPath], {
+    const mergedImage = await mergeImages([
+        background.imgPath,
+        {
+            src: `Assets/Floor/${getRandomNumber(1, 9)}.png`,
+            x: 0,
+            y: 160
+        },
+        {
+            src: `Assets/Floor/${getRandomNumber(1, 9)}.png`,
+            x: 160,
+            y: 160
+        },
+        {
+            src: `Assets/Floor/${getRandomNumber(1, 9)}.png`,
+            x: 320,
+            y: 160
+        },
+        {
+            src: `Assets/Floor/${getRandomNumber(1, 9)}.png`,
+            x: 0,
+            y: 320
+        },
+        {
+            src: `Assets/Floor/${getRandomNumber(1, 9)}.png`,
+            x: 160,
+            y: 320
+        },
+        {
+            src: `Assets/Floor/${getRandomNumber(1, 9)}.png`,
+            x: 320,
+            y: 320
+        },
+        player.imgPath,
+        weapon.imgPath], {
         Canvas,
         Image
     });
