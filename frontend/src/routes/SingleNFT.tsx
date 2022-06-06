@@ -1,8 +1,9 @@
 import { useState, useEffect } from "react";
-import { useParams, Link } from "react-router-dom";
+import { useParams } from "react-router-dom";
 
 import DisplaySingleNFT from "../components/DisplaySingleNFT";
 import TakeMeHome from "../components/TakeMeHome";
+import NotFound from "../components/NotFound";
 import { API_ADDRESS } from "../constant";
 import type { NFT } from "../types";
 
@@ -27,15 +28,15 @@ export default function SingleNFT() {
     wrapper();
   }, [nftId]);
 
-  return (
-    NFT && (
-      <div className="text-center">
-        <TakeMeHome />
-        <h2 className="mb-2">Oh, Great Defender !</h2>
-        <div className="container col-4">
-          <DisplaySingleNFT NFT={NFT} />
-        </div>
+  return NFT ? (
+    <div className="text-center">
+      <TakeMeHome />
+      <h2 className="mb-2">Oh, Great Defender !</h2>
+      <div className="container col-4">
+        <DisplaySingleNFT NFT={NFT} />
       </div>
-    )
+    </div>
+  ) : (
+    <NotFound />
   );
 }

@@ -4,6 +4,7 @@ import MintNFT from "./components/MintNFT";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
 import ConnectWallet from "./components/ConnectWallet";
+import TransferNFT from "./components/TransferNFT";
 
 const App = () => {
   const { account } = useEthers();
@@ -22,6 +23,7 @@ const App = () => {
               {account ? (
                 <>
                   <MintNFT userAddress={account} />
+                  <TransferNFT userAddress={account} />
                 </>
               ) : (
                 <ConnectWallet />
