@@ -1,4 +1,4 @@
-import { Outlet, Link } from "react-router-dom";
+import { Outlet } from "react-router-dom";
 import { useEthers } from "@usedapp/core";
 import MintNFT from "./components/MintNFT";
 import Header from "./components/Header";
@@ -18,7 +18,7 @@ const App = () => {
             <p className="lead text-muted">
               Join our community by minting your first NFT
             </p>
-            <p>
+            <div>
               {account ? (
                 <>
                   <MintNFT userAddress={account} />
@@ -26,12 +26,12 @@ const App = () => {
               ) : (
                 <ConnectWallet />
               )}
-            </p>
+            </div>
           </div>
         </div>
       </section>
 
-      <div className="album py-5 bg-light">
+      <div className="album py-4 bg-dark">
         <div className="container">
           <Outlet />
         </div>

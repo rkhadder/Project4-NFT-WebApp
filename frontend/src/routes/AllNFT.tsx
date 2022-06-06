@@ -24,7 +24,7 @@ export default function AllNFT() {
   return (
     allNFT && (
       <>
-        <h2 className="text-center mb-4">Our Great Defenders </h2>
+        <h2 className="text-center mb-4">Our Great Defenders</h2>
         <div className="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
           {allNFT.map((NFT: NFT) => (
             <DisplaySingleNFT key={NFT.tokenId} NFT={NFT} />
