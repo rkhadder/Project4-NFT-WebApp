@@ -7,7 +7,7 @@ import "./index.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import { DAppProvider } from "@usedapp/core";
-// import NFT from "./routes/NFT";
+import AllNFT from "./routes/AllNFT";
 import SingleNFT from "./routes/SingleNFT";
 
 const root = ReactDOM.createRoot(
@@ -19,9 +19,9 @@ root.render(
       <DAppProvider config={{}}>
         <Routes>
           <Route path="/" element={<App />}>
-            {/* <Route path="NFT" element={<NFT />}> */}
-              <Route path="NFT/:nftId" element={<SingleNFT />} />
-            {/* </Route> */}
+            <Route path="/" element={<AllNFT />} />
+            <Route path="/NFT" element={<AllNFT />} />
+            <Route path="/NFT/:nftId" element={<SingleNFT />} />
             <Route
               path="*"
               element={

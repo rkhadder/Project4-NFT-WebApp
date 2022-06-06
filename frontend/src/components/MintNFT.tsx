@@ -12,7 +12,7 @@ const MintNFT: React.FC<MintProps> = ({ userAddress }: any) => {
   };
 
   return (
-    <button onClick={() => mint()} className="btn btn-primary my-2">
+    <button onClick={() => mint()} className="btn btn-primary">
       Mint
     </button>
   );
