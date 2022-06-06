@@ -1,12 +1,10 @@
-import { useEthers, useEtherBalance } from "@usedapp/core";
+import { useEthers } from "@usedapp/core";
 
 function ConnectWallet() {
   const { activateBrowserWallet, account } = useEthers();
-  const etherBalance = useEtherBalance(account);
 
   function handleConnectWallet() {
     activateBrowserWallet();
-    console.log(etherBalance);
   }
 
   return (

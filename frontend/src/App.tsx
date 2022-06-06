@@ -18,7 +18,7 @@ const App = () => {
             <p className="lead text-muted">
               Join our community by minting your first NFT
             </p>
-            <p>
+            <div>
               {account ? (
                 <>
                   <MintNFT userAddress={account} />
@@ -26,7 +26,7 @@ const App = () => {
               ) : (
                 <ConnectWallet />
               )}
-            </p>
+            </div>
           </div>
         </div>
       </section>

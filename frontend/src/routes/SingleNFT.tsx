@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
 
 import DisplaySingleNFT from "../components/DisplaySingleNFT";
+import TakeMeHome from "../components/TakeMeHome";
 import { API_ADDRESS } from "../constant";
 import type { NFT } from "../types";
 
@@ -29,9 +30,7 @@ export default function SingleNFT() {
   return (
     NFT && (
       <div className="text-center">
-        <Link to="/">
-          <button className="btn btn-primary mb-4">Take Me Home</button>
-        </Link>
+        <TakeMeHome />
         <h2 className="mb-2">Oh, Great Defender !</h2>
         <div className="container col-4">
           <DisplaySingleNFT NFT={NFT} />

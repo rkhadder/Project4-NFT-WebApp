@@ -1,6 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
 
 import "bootstrap/dist/css/bootstrap.css";
 import "./index.css";
@@ -9,6 +9,7 @@ import reportWebVitals from "./reportWebVitals";
 import { DAppProvider } from "@usedapp/core";
 import AllNFT from "./routes/AllNFT";
 import SingleNFT from "./routes/SingleNFT";
+import TakeMeHome from "./components/TakeMeHome";
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
@@ -25,8 +26,9 @@ root.render(
             <Route
               path="*"
               element={
-                <main style={{ padding: "1rem" }}>
-                  <p>404</p>
+                <main className="text-center">
+                  <h1 style={{ fontSize: "4.5rem" }}>404</h1>
+                  <TakeMeHome />
                 </main>
               }
             />
